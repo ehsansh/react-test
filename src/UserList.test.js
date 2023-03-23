@@ -7,10 +7,11 @@ test('render one row per user', () => {
         { name: 'ehsan', email: 'ehsan@gmail.com' },
         { name: 'josh', email: 'josh@gmail.com' },
     ];
-    render(<UserList users={users} />);
+    const { container } = render(<UserList users={users} />);
 
     //find all the rows in the table
-    const rows = within(screen.getByTestId('users')).getAllByRole('row');
+    // const rows = within(screen.getByTestId('users')).getAllByRole('row');
+    const rows = container.querySelectorAll('tbody tr');
 
     //assertion: correct number of rows in the table
     expect(rows).toHaveLength(2);
