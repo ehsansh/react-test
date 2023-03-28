@@ -99,3 +99,32 @@ test('show an error if passwords do not match', async () => {
     const passwordError = await screen.findByText(/passwords do not match/i);
     expect(passwordError).toBeInTheDocument();
 });
+
+test('should show no error if every input is valid', () => {
+    render(<App />);
+
+    const emailInput = screen.getByRole('textbox', {
+        name: /email/i,
+    });
+    const passwordInput = screen.getByLabelText('Password');
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+
+    userEvent.type(emailInput, 'ehsan@gmail.com');
+    userEvent.type(passwordInput, '123456');
+    userEvent.type(confirmPasswordInput, '123456');
+
+    const submitBtn = screen.getByRole('button', {
+        name: /submit/i,
+    });
+    userEvent.click(submitBtn);
+
+    const passwordError = screen.queryByText(/passwords do not match/i);
+    const confirmPasswordError = screen.queryByText(
+        /password should be more than 5 correctors/i
+    );
+    const emailError = screen.queryByText(/the email is invalid/i);
+
+    expect(passwordError).not.toBeInTheDocument();
+    expect(confirmPasswordError).not.toBeInTheDocument();
+    expect(emailError).not.toBeInTheDocument();
+});
