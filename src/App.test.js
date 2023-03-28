@@ -7,7 +7,7 @@ test('inputs should be initially empty', () => {
     const emailInput = screen.getByRole('textbox');
     expect(emailInput.value).toBe('');
 
-    const passwordInput = screen.getByLabelText(/password/i);
+    const passwordInput = screen.getByLabelText('Password');
     expect(passwordInput.value).toBe('');
 
     const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
