@@ -41,17 +41,18 @@ test('should be able to type a confirm password', () => {
     expect(confirmPasswordInput.value).toBe('123');
 });
 
-test('should show error message on invalid email', () => {
+test('should show error message on invalid email', async () => {
     render(<App />);
     const emailError = screen.queryByText(/the email is invalid/i);
     expect(emailError).not.toBeInTheDocument();
     const emailInput = screen.getByRole('textbox', {
-        name: /emai/i,
+        name: /email/i,
     });
     userEvent.type(emailInput, 'ehsangmail.com');
     const submitBtn = screen.getByRole('button', {
         name: /submit/i,
     });
     userEvent.click(submitBtn);
-    expect(emailError).toBeInTheDocument();
+    const emailErrorAgain = await screen.findByText(/the email is invalid/i);
+    expect(emailErrorAgain).toBeInTheDocument();
 });
