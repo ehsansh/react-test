@@ -9,4 +9,7 @@ test('inputs should be initially empty', () => {
 
     const passwordInput = screen.getByLabelText(/password/i);
     expect(passwordInput.value).toBe('');
+
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    expect(confirmPasswordInput.value).toBe('');
 });
