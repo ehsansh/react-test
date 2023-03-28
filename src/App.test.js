@@ -56,3 +56,24 @@ test('should show error message on invalid email', async () => {
     const emailErrorAgain = await screen.findByText(/the email is invalid/i);
     expect(emailErrorAgain).toBeInTheDocument();
 });
+
+test('should show error message on invalid password', async () => {
+    render(<App />);
+    const emailInput = screen.getByRole('textbox', {
+        name: /email/i,
+    });
+    userEvent.type(emailInput, 'ehsan@gmail.com');
+
+    const passwordInput = screen.getByLabelText('Password');
+    userEvent.type(passwordInput, '123');
+
+    const submitBtn = screen.getByRole('button', {
+        name: /submit/i,
+    });
+    userEvent.click(submitBtn);
+
+    const passwordError = await screen.findByText(
+        /password should be more than 5 correctors/i
+    );
+    expect(passwordError).toBeInTheDocument();
+});
