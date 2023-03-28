@@ -2,9 +2,33 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
-test('inputs should be initially empty', () => {
+beforeEach(() => {
     render(<App />);
+});
 
+const typeIntoForm = ({ email, password, confirmPassword }) => {
+    const emailInput = screen.getByRole('textbox', {
+        name: /emai/i,
+    });
+    const passwordInput = screen.getByLabelText('Password');
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    if (email) {
+        userEvent.type(emailInput, email);
+    }
+    if (password) {
+        userEvent.type(passwordInput, password);
+    }
+    if (confirmPassword) {
+        userEvent.type(confirmPasswordInput, confirmPassword);
+    }
+    return {
+        emailInput,
+        passwordInput,
+        confirmPasswordInput,
+    };
+};
+
+test('inputs should be initially empty', () => {
     const emailInput = screen.getByRole('textbox');
     expect(emailInput.value).toBe('');
 
@@ -16,39 +40,25 @@ test('inputs should be initially empty', () => {
 });
 
 test('should be able to type an email', () => {
-    render(<App />);
-
-    const emailInput = screen.getByRole('textbox', {
-        name: /emai/i,
-    });
-    userEvent.type(emailInput, 'ehsan@gmail.com');
+    const { emailInput } = typeIntoForm({ email: 'ehsan@gmail.com' });
     expect(emailInput.value).toBe('ehsan@gmail.com');
 });
 
 test('should be able to type a password', () => {
-    render(<App />);
-
-    const passwordInput = screen.getByLabelText('Password');
-    userEvent.type(passwordInput, '123');
+    const { passwordInput } = typeIntoForm({ password: '123' });
     expect(passwordInput.value).toBe('123');
 });
 
 test('should be able to type a confirm password', () => {
-    render(<App />);
-
     const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
     userEvent.type(confirmPasswordInput, '123');
     expect(confirmPasswordInput.value).toBe('123');
 });
 
 test('should show error message on invalid email', async () => {
-    render(<App />);
     const emailError = screen.queryByText(/the email is invalid/i);
     expect(emailError).not.toBeInTheDocument();
-    const emailInput = screen.getByRole('textbox', {
-        name: /email/i,
-    });
-    userEvent.type(emailInput, 'ehsangmail.com');
+    typeIntoForm({ email: 'ehsangmail.com' });
     const submitBtn = screen.getByRole('button', {
         name: /submit/i,
     });
@@ -58,14 +68,7 @@ test('should show error message on invalid email', async () => {
 });
 
 test('should show error message on invalid password', async () => {
-    render(<App />);
-    const emailInput = screen.getByRole('textbox', {
-        name: /email/i,
-    });
-    userEvent.type(emailInput, 'ehsan@gmail.com');
-
-    const passwordInput = screen.getByLabelText('Password');
-    userEvent.type(passwordInput, '123');
+    typeIntoForm({ email: 'ehsan@gmail.com', password: '123' });
 
     const submitBtn = screen.getByRole('button', {
         name: /submit/i,
@@ -79,17 +82,11 @@ test('should show error message on invalid password', async () => {
 });
 
 test('show an error if passwords do not match', async () => {
-    render(<App />);
-    const emailInput = screen.getByRole('textbox', {
-        name: /email/i,
+    typeIntoForm({
+        email: 'ehsan@gmail.com',
+        password: '123456',
+        confirmPassword: '12312312',
     });
-    userEvent.type(emailInput, 'ehsan@gmail.com');
-
-    const passwordInput = screen.getByLabelText('Password');
-    userEvent.type(passwordInput, '123456');
-
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
-    userEvent.type(confirmPasswordInput, '123457');
 
     const submitBtn = screen.getByRole('button', {
         name: /submit/i,
@@ -101,17 +98,11 @@ test('show an error if passwords do not match', async () => {
 });
 
 test('should show no error if every input is valid', () => {
-    render(<App />);
-
-    const emailInput = screen.getByRole('textbox', {
-        name: /email/i,
+    typeIntoForm({
+        email: 'ehsan@gmail.com',
+        password: '123456',
+        confirmPassword: '123456',
     });
-    const passwordInput = screen.getByLabelText('Password');
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
-
-    userEvent.type(emailInput, 'ehsan@gmail.com');
-    userEvent.type(passwordInput, '123456');
-    userEvent.type(confirmPasswordInput, '123456');
 
     const submitBtn = screen.getByRole('button', {
         name: /submit/i,
