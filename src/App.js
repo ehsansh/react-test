@@ -4,7 +4,7 @@ import './App.css';
 import validator from 'validator';
 
 function App() {
-    const [singUp, setSignUp] = useState({
+    const [signUp, setSignUp] = useState({
         email: '',
         password: '',
         confirmPassword: '',
@@ -14,18 +14,21 @@ function App() {
 
     const handleChange = e => {
         setSignUp({
-            ...singUp,
+            ...signUp,
             [e.target.name]: e.target.value,
         });
     };
 
     const handleClick = e => {
         e.preventDefault();
-        if (!validator.isEmail(singUp.email)) {
+        if (!validator.isEmail(signUp.email)) {
             return setError('the email is invalid');
         }
-        if (singUp.password.length <= 5) {
+        if (signUp.password.length <= 5) {
             return setError('password should be more than 5 correctors');
+        }
+        if (signUp.password !== signUp.confirmPassword) {
+            return setError('passwords do not match');
         }
     };
 
@@ -41,7 +44,7 @@ function App() {
                         id='email'
                         name='email'
                         className='form-control'
-                        value={singUp.email}
+                        value={signUp.email}
                         onChange={handleChange}
                     />
                 </div>
@@ -54,7 +57,7 @@ function App() {
                         id='password'
                         name='password'
                         className='form-control'
-                        value={singUp.password}
+                        value={signUp.password}
                         onChange={handleChange}
                     />
                 </div>
@@ -67,7 +70,7 @@ function App() {
                         id='confirm-password'
                         name='confirmPassword'
                         className='form-control'
-                        value={singUp.confirmPassword}
+                        value={signUp.confirmPassword}
                         onChange={handleChange}
                     />
                 </div>

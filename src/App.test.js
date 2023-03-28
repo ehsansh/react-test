@@ -77,3 +77,25 @@ test('should show error message on invalid password', async () => {
     );
     expect(passwordError).toBeInTheDocument();
 });
+
+test('show an error if passwords do not match', async () => {
+    render(<App />);
+    const emailInput = screen.getByRole('textbox', {
+        name: /email/i,
+    });
+    userEvent.type(emailInput, 'ehsan@gmail.com');
+
+    const passwordInput = screen.getByLabelText('Password');
+    userEvent.type(passwordInput, '123456');
+
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    userEvent.type(confirmPasswordInput, '123457');
+
+    const submitBtn = screen.getByRole('button', {
+        name: /submit/i,
+    });
+    userEvent.click(submitBtn);
+
+    const passwordError = await screen.findByText(/passwords do not match/i);
+    expect(passwordError).toBeInTheDocument();
+});
