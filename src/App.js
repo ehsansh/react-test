@@ -24,6 +24,9 @@ function App() {
         if (!validator.isEmail(singUp.email)) {
             return setError('the email is invalid');
         }
+        if (singUp.password.length <= 5) {
+            return setError('password should be more than 5 correctors');
+        }
     };
 
     return (
