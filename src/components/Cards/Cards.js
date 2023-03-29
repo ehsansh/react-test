@@ -7,6 +7,7 @@ const Cards = ({ cats }) => {
         <div className='pet-cards-container'>
             {cats.map(cat => (
                 <Card
+                    key={cat.id}
                     id={cat.id}
                     name={cat.name}
                     phone={cat.phone}
