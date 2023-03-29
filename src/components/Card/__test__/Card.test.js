@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { useEvent } from '@testing-library/user-event';
+import userEvents from '@testing-library/user-event';
 import Card from '../Card';
 
 const cardProps = {
@@ -40,23 +40,32 @@ describe('Card', () => {
 
     test('should show outlined heart', () => {
         render(<Card {...cardProps} />);
-        expect(screen.getByAltText(/filled heart/i)).not.toBeInTheDocument();
+        expect(screen.queryByAltText(/filled heart/i)).not.toBeInTheDocument();
         expect(screen.getByAltText(/outlined heart/i)).toBeInTheDocument();
     });
 
     test('should show filled heart', () => {
         render(<Card {...cardProps} favoured={true} />);
-        expect(screen.getByAltText(/outlined heart/i)).not.toBeInTheDocument();
+        expect(
+            screen.queryByAltText(/outlined heart/i)
+        ).not.toBeInTheDocument();
         expect(screen.getByAltText(/filled heart/i)).toBeInTheDocument();
     });
 
-    test('should toggle heart status', () => {
+    test('should toggle heart status', async () => {
         render(<Card {...cardProps} />);
-        useEvent.click(screen.getByRole('button'));
-        expect(screen.getByAltText(/outlined heart/i)).not.toBeInTheDocument();
-        expect(screen.getByAltText(/filled heart/i)).toBeInTheDocument();
-        useEvent.click(screen.getByRole('button'));
-        expect(screen.getByAltText(/filled heart/i)).not.toBeInTheDocument();
-        expect(screen.getByAltText(/outlined heart/i)).toBeInTheDocument();
+        userEvents.click(screen.getByRole('button'));
+
+        expect(await screen.findByAltText(/filled heart/i)).toBeInTheDocument();
+        expect(
+            screen.queryByAltText(/outlined heart/i)
+        ).not.toBeInTheDocument();
+
+        userEvents.click(screen.getByRole('button'));
+
+        expect(
+            await screen.findByAltText(/outlined heart/i)
+        ).toBeInTheDocument();
+        expect(screen.queryByAltText(/filled heart/i)).not.toBeInTheDocument();
     });
 });
