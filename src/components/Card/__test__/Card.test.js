@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-
+import { useEvent } from '@testing-library/user-event';
 import Card from '../Card';
 
 const cardProps = {
@@ -36,5 +36,27 @@ describe('Card', () => {
     test('should show image with correct src', () => {
         render(<Card {...cardProps} />);
         expect(screen.getByAltText(/cute cat/i).src).toBe(cardProps.image.url);
+    });
+
+    test('should show outlined heart', () => {
+        render(<Card {...cardProps} />);
+        expect(screen.getByAltText(/filled heart/i)).not.toBeInTheDocument();
+        expect(screen.getByAltText(/outlined heart/i)).toBeInTheDocument();
+    });
+
+    test('should show filled heart', () => {
+        render(<Card {...cardProps} favoured={true} />);
+        expect(screen.getByAltText(/outlined heart/i)).not.toBeInTheDocument();
+        expect(screen.getByAltText(/filled heart/i)).toBeInTheDocument();
+    });
+
+    test('should toggle heart status', () => {
+        render(<Card {...cardProps} />);
+        useEvent.click(screen.getByRole('button'));
+        expect(screen.getByAltText(/outlined heart/i)).not.toBeInTheDocument();
+        expect(screen.getByAltText(/filled heart/i)).toBeInTheDocument();
+        useEvent.click(screen.getByRole('button'));
+        expect(screen.getByAltText(/filled heart/i)).not.toBeInTheDocument();
+        expect(screen.getByAltText(/outlined heart/i)).toBeInTheDocument();
     });
 });
