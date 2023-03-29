@@ -28,6 +28,13 @@ const typeIntoForm = ({ email, password, confirmPassword }) => {
     };
 };
 
+const submitTheForm = () => {
+    const submitBtn = screen.getByRole('button', {
+        name: /submit/i,
+    });
+    userEvent.click(submitBtn);
+};
+
 test('inputs should be initially empty', () => {
     const emailInput = screen.getByRole('textbox');
     expect(emailInput.value).toBe('');
@@ -59,21 +66,14 @@ test('should show error message on invalid email', async () => {
     const emailError = screen.queryByText(/the email is invalid/i);
     expect(emailError).not.toBeInTheDocument();
     typeIntoForm({ email: 'ehsangmail.com' });
-    const submitBtn = screen.getByRole('button', {
-        name: /submit/i,
-    });
-    userEvent.click(submitBtn);
+    submitTheForm();
     const emailErrorAgain = await screen.findByText(/the email is invalid/i);
     expect(emailErrorAgain).toBeInTheDocument();
 });
 
 test('should show error message on invalid password', async () => {
     typeIntoForm({ email: 'ehsan@gmail.com', password: '123' });
-
-    const submitBtn = screen.getByRole('button', {
-        name: /submit/i,
-    });
-    userEvent.click(submitBtn);
+    submitTheForm();
 
     const passwordError = await screen.findByText(
         /password should be more than 5 correctors/i
@@ -87,11 +87,7 @@ test('show an error if passwords do not match', async () => {
         password: '123456',
         confirmPassword: '12312312',
     });
-
-    const submitBtn = screen.getByRole('button', {
-        name: /submit/i,
-    });
-    userEvent.click(submitBtn);
+    submitTheForm();
 
     const passwordError = await screen.findByText(/passwords do not match/i);
     expect(passwordError).toBeInTheDocument();
@@ -103,11 +99,7 @@ test('should show no error if every input is valid', () => {
         password: '123456',
         confirmPassword: '123456',
     });
-
-    const submitBtn = screen.getByRole('button', {
-        name: /submit/i,
-    });
-    userEvent.click(submitBtn);
+    submitTheForm();
 
     const passwordError = screen.queryByText(/passwords do not match/i);
     const confirmPasswordError = screen.queryByText(
