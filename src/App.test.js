@@ -29,21 +29,17 @@ const typeIntoForm = ({ email, password, confirmPassword }) => {
 };
 
 const submitTheForm = () => {
-    const submitBtn = screen.getByRole('button', {
-        name: /submit/i,
-    });
-    userEvent.click(submitBtn);
+    userEvent.click(
+        screen.getByRole('button', {
+            name: /submit/i,
+        })
+    );
 };
 
 test('inputs should be initially empty', () => {
-    const emailInput = screen.getByRole('textbox');
-    expect(emailInput.value).toBe('');
-
-    const passwordInput = screen.getByLabelText('Password');
-    expect(passwordInput.value).toBe('');
-
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
-    expect(confirmPasswordInput.value).toBe('');
+    expect(screen.getByRole('textbox').value).toBe('');
+    expect(screen.getByLabelText('Password').value).toBe('');
+    expect(screen.getByLabelText(/confirm password/i).value).toBe('');
 });
 
 test('should be able to type an email', () => {
@@ -57,28 +53,25 @@ test('should be able to type a password', () => {
 });
 
 test('should be able to type a confirm password', () => {
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
-    userEvent.type(confirmPasswordInput, '123');
-    expect(confirmPasswordInput.value).toBe('123');
+    userEvent.type(screen.getByLabelText(/confirm password/i), '123');
+    expect(screen.getByLabelText(/confirm password/i).value).toBe('123');
 });
 
 test('should show error message on invalid email', async () => {
-    const emailError = screen.queryByText(/the email is invalid/i);
-    expect(emailError).not.toBeInTheDocument();
+    expect(screen.queryByText(/the email is invalid/i)).not.toBeInTheDocument();
     typeIntoForm({ email: 'ehsangmail.com' });
     submitTheForm();
-    const emailErrorAgain = await screen.findByText(/the email is invalid/i);
-    expect(emailErrorAgain).toBeInTheDocument();
+    expect(
+        await screen.findByText(/the email is invalid/i)
+    ).toBeInTheDocument();
 });
 
 test('should show error message on invalid password', async () => {
     typeIntoForm({ email: 'ehsan@gmail.com', password: '123' });
     submitTheForm();
-
-    const passwordError = await screen.findByText(
-        /password should be more than 5 correctors/i
-    );
-    expect(passwordError).toBeInTheDocument();
+    expect(
+        await screen.findByText(/password should be more than 5 correctors/i)
+    ).toBeInTheDocument();
 });
 
 test('show an error if passwords do not match', async () => {
@@ -88,9 +81,9 @@ test('show an error if passwords do not match', async () => {
         confirmPassword: '12312312',
     });
     submitTheForm();
-
-    const passwordError = await screen.findByText(/passwords do not match/i);
-    expect(passwordError).toBeInTheDocument();
+    expect(
+        await screen.findByText(/passwords do not match/i)
+    ).toBeInTheDocument();
 });
 
 test('should show no error if every input is valid', () => {
@@ -100,14 +93,11 @@ test('should show no error if every input is valid', () => {
         confirmPassword: '123456',
     });
     submitTheForm();
-
-    const passwordError = screen.queryByText(/passwords do not match/i);
-    const confirmPasswordError = screen.queryByText(
-        /password should be more than 5 correctors/i
-    );
-    const emailError = screen.queryByText(/the email is invalid/i);
-
-    expect(passwordError).not.toBeInTheDocument();
-    expect(confirmPasswordError).not.toBeInTheDocument();
-    expect(emailError).not.toBeInTheDocument();
+    expect(
+        screen.queryByText(/passwords do not match/i)
+    ).not.toBeInTheDocument();
+    expect(
+        screen.queryByText(/password should be more than 5 correctors/i)
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/the email is invalid/i)).not.toBeInTheDocument();
 });
