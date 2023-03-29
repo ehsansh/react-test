@@ -6,20 +6,20 @@ describe('Filter', () => {
     test('should be able to change value of favoured select', () => {
         render(<Filter />);
         const select = screen.getByLabelText(/favourite/i);
-        expect(select.value).toBe(/any/i);
+        expect(select.value).toBe('any');
         userEvents.selectOptions(select, 'favourite');
-        expect(select.value).toBe(/favourite/i);
+        expect(select.value).toBe('favourite');
         userEvents.selectOptions(select, 'not favourite');
-        expect(select.value).toBe(/not favourite/i);
+        expect(select.value).toBe('not favourite');
     });
 
     test('should be able to change value of gender select', () => {
         render(<Filter />);
         const select = screen.getByLabelText(/gender/i);
-        expect(select.value).toBe(/any/i);
+        expect(select.value).toBe('any');
         userEvents.selectOptions(select, 'male');
-        expect(select.value).toBe(/male/i);
+        expect(select.value).toBe('male');
         userEvents.selectOptions(select, 'female');
-        expect(select.value).toBe(/female/i);
+        expect(select.value).toBe('female');
     });
 });
