@@ -16,7 +16,6 @@ const cardProps = {
 describe('Card', () => {
     test('should show name of cat', () => {
         render(<Card {...cardProps} />);
-
         expect(
             screen.getByRole('heading', {
                 name: /john/i,
@@ -26,13 +25,16 @@ describe('Card', () => {
 
     test('should show phone', () => {
         render(<Card {...cardProps} />);
-
         expect(screen.getByText(/123/i)).toBeInTheDocument();
     });
 
     test('should show email', () => {
         render(<Card {...cardProps} />);
-
         expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
+    });
+
+    test('should show image with correct src', () => {
+        render(<Card {...cardProps} />);
+        expect(screen.getByAltText(/cute cat/i).src).toBe(cardProps.image.url);
     });
 });
