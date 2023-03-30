@@ -82,4 +82,22 @@ describe('Pets', () => {
         const filteredCards = await screen.findAllByRole('article');
         expect(filteredCards).toStrictEqual([cards[2], cards[3], cards[4]]);
     });
+
+    test('should filter for male favoured cats', async () => {
+        render(<Pets />);
+        render(<Filter filters={{}} setFilters={() => {}} />);
+        const cards = await screen.findAllByRole('article');
+        act(() => {
+            userEvents.click(within(cards[0]).getByRole('button'));
+            userEvents.click(within(cards[1]).getByRole('button'));
+            userEvents.selectOptions(
+                screen.getByLabelText(/favoured/i),
+                'favoured'
+            );
+            userEvents.selectOptions(screen.getByLabelText(/gender/i), 'male');
+        });
+
+        const filteredCards = await screen.findAllByRole('article');
+        expect(filteredCards).toStrictEqual([cards[1]]);
+    });
 });
