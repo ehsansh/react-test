@@ -1,4 +1,4 @@
-import { getAllByRole, render, screen } from '@testing-library/react';
+import { getAllByRole, render, screen, within } from '@testing-library/react';
 import userEvents from '@testing-library/user-event';
 import Pets from '../Pets';
 import Filter from '../../Filter/Filter';
@@ -14,9 +14,6 @@ const server = setupServer(
     })
 );
 
-// beforeEach(() => {
-//     render(<Filter filters={{}} setFilters={() => {}} />);
-// });
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -51,5 +48,39 @@ describe('Pets', () => {
         });
         const maleCards = await screen.findAllByRole('article');
         expect(maleCards).toStrictEqual([cards[1], cards[3]]);
+    });
+
+    test('should filter for favoured cats', async () => {
+        render(<Pets />);
+        render(<Filter filters={{}} setFilters={() => {}} />);
+        const cards = await screen.findAllByRole('article');
+        userEvents.click(within(cards[0]).getByRole('button'));
+        userEvents.click(within(cards[1]).getByRole('button'));
+        act(() => {
+            userEvents.selectOptions(
+                screen.getByLabelText(/favourite/i),
+                'favourite'
+            );
+        });
+        expect(screen.getByRole('article')).toStrictEqual([cards[0], cards[1]]);
+    });
+
+    test('should filter for not favoured cats', async () => {
+        render(<Pets />);
+        render(<Filter filters={{}} setFilters={() => {}} />);
+        const cards = await screen.findAllByRole('article');
+        userEvents.click(within(cards[0]).getByRole('button'));
+        userEvents.click(within(cards[1]).getByRole('button'));
+        act(() => {
+            userEvents.selectOptions(
+                screen.getByLabelText(/favourite/i),
+                'favourite'
+            );
+        });
+        expect(screen.getByRole('article')).toStrictEqual([
+            cards[2],
+            cards[3],
+            cards[4],
+        ]);
     });
 });
