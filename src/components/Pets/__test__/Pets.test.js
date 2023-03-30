@@ -54,33 +54,32 @@ describe('Pets', () => {
         render(<Pets />);
         render(<Filter filters={{}} setFilters={() => {}} />);
         const cards = await screen.findAllByRole('article');
-        userEvents.click(within(cards[0]).getByRole('button'));
-        userEvents.click(within(cards[1]).getByRole('button'));
         act(() => {
+            userEvents.click(within(cards[1]).getByRole('button'));
+            userEvents.click(within(cards[0]).getByRole('button'));
             userEvents.selectOptions(
-                screen.getByLabelText(/favourite/i),
-                'favourite'
+                screen.getByLabelText(/favoured/i),
+                'favoured'
             );
         });
-        expect(screen.getByRole('article')).toStrictEqual([cards[0], cards[1]]);
+        const filteredCards = await screen.findAllByRole('article');
+        expect(filteredCards.length).toBe(2);
+        expect(filteredCards).toStrictEqual([cards[0], cards[1]]);
     });
 
     test('should filter for not favoured cats', async () => {
         render(<Pets />);
         render(<Filter filters={{}} setFilters={() => {}} />);
         const cards = await screen.findAllByRole('article');
-        userEvents.click(within(cards[0]).getByRole('button'));
-        userEvents.click(within(cards[1]).getByRole('button'));
         act(() => {
+            userEvents.click(within(cards[0]).getByRole('button'));
+            userEvents.click(within(cards[1]).getByRole('button'));
             userEvents.selectOptions(
-                screen.getByLabelText(/favourite/i),
-                'favourite'
+                screen.getByLabelText(/favoured/i),
+                'not favoured'
             );
         });
-        expect(screen.getByRole('article')).toStrictEqual([
-            cards[2],
-            cards[3],
-            cards[4],
-        ]);
+        const filteredCards = await screen.findAllByRole('article');
+        expect(filteredCards).toStrictEqual([cards[2], cards[3], cards[4]]);
     });
 });

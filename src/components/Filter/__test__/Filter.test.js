@@ -5,12 +5,12 @@ import Filter from '../Filter';
 describe('Filter', () => {
     test('should be able to change value of favoured select', () => {
         render(<Filter filters={{}} setFilters={() => {}} />);
-        const select = screen.getByLabelText(/favourite/i);
+        const select = screen.getByLabelText(/favoured/i);
         expect(select.value).toBe('any');
-        userEvents.selectOptions(select, 'favourite');
-        expect(select.value).toBe('favourite');
-        userEvents.selectOptions(select, 'not favourite');
-        expect(select.value).toBe('not favourite');
+        userEvents.selectOptions(select, 'favoured');
+        expect(select.value).toBe('favoured');
+        userEvents.selectOptions(select, 'not favoured');
+        expect(select.value).toBe('not favoured');
     });
 
     test('should be able to change value of gender select', () => {

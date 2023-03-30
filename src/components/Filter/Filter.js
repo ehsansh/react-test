@@ -4,11 +4,21 @@ const Filter = ({ filters, setFilters }) => {
     return (
         <div className='pet-filter-container'>
             <div className='filter-container'>
-                <label htmlFor='favourite'>Favourite</label>
-                <select name='favourite' id='favourite' className='form-select'>
+                <label htmlFor='favoured'>Favoured</label>
+                <select
+                    name='favoured'
+                    id='favoured'
+                    className='form-select'
+                    onChange={e => {
+                        setFilters({
+                            ...filters,
+                            favoured: e.target.value,
+                        });
+                    }}
+                >
                     <option value='any'>Any</option>
-                    <option value='favourite'>Favourite</option>
-                    <option value='not favourite'>Not Favourite</option>
+                    <option value='favoured'>Favoured</option>
+                    <option value='not favoured'>Not Favoured</option>
                 </select>
             </div>
             <div className='filter-container'>
