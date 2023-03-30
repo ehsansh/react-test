@@ -4,7 +4,7 @@ import Filter from '../Filter';
 
 describe('Filter', () => {
     test('should be able to change value of favoured select', () => {
-        render(<Filter />);
+        render(<Filter filters={{}} setFilters={() => {}} />);
         const select = screen.getByLabelText(/favourite/i);
         expect(select.value).toBe('any');
         userEvents.selectOptions(select, 'favourite');
@@ -14,7 +14,7 @@ describe('Filter', () => {
     });
 
     test('should be able to change value of gender select', () => {
-        render(<Filter />);
+        render(<Filter filters={{}} setFilters={() => {}} />);
         const select = screen.getByLabelText(/gender/i);
         expect(select.value).toBe('any');
         userEvents.selectOptions(select, 'male');

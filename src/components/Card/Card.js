@@ -7,11 +7,7 @@ import './Card.css';
 const Card = ({ name, phone, email, image, favoured }) => {
     const [isFavoured, setIsFavoured] = useState(favoured);
 
-    const toggleFavoured = () => {
-        console.log('Before toggle:', isFavoured);
-        setIsFavoured(!isFavoured);
-        console.log('After toggle:', isFavoured);
-    };
+    const toggleFavoured = () => setIsFavoured(!isFavoured);
 
     return (
         <article className='card'>

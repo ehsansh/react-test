@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvents from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 import Card from '../Card';
 
 const cardProps = {
@@ -54,14 +55,18 @@ describe('Card', () => {
 
     test('should toggle heart status', async () => {
         render(<Card {...cardProps} />);
-        userEvents.click(screen.getByRole('button'));
+        act(() => {
+            userEvents.click(screen.getByRole('button'));
+        });
 
         expect(await screen.findByAltText(/filled heart/i)).toBeInTheDocument();
         expect(
             screen.queryByAltText(/outlined heart/i)
         ).not.toBeInTheDocument();
 
-        userEvents.click(screen.getByRole('button'));
+        act(() => {
+            userEvents.click(screen.getByRole('button'));
+        });
 
         expect(
             await screen.findByAltText(/outlined heart/i)
