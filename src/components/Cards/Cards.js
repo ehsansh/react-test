@@ -4,13 +4,7 @@ import { PetsContext } from '../Pets/Pets';
 import './Cards.css';
 
 const Cards = () => {
-    const { cats, setCats } = useContext(PetsContext);
-
-    const updateFavourites = (index, favoured) => {
-        const updatedCats = [...cats];
-        updatedCats[index].favoured = favoured;
-        setCats(updatedCats);
-    };
+    const { cats } = useContext(PetsContext);
 
     return (
         <div className='pet-cards-container'>
@@ -23,7 +17,6 @@ const Cards = () => {
                     email={cat.email}
                     image={cat.image}
                     favoured={cat.favoured}
-                    updateFavourites={updateFavourites}
                     index={index}
                 />
             ))}
