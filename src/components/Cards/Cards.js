@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Card from '../Card/Card';
+import { PetsContext } from '../Pets/Pets';
 import './Cards.css';
 
-const Cards = ({ cats, setCats }) => {
+const Cards = () => {
+    const { cats, setCats } = useContext(PetsContext);
+
     const updateFavourites = (index, favoured) => {
         const updatedCats = [...cats];
         updatedCats[index].favoured = favoured;
