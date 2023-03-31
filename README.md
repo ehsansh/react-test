@@ -1,4 +1,3 @@
 # Learning Tests In React
 
-The purpose of creating this repository is to facilitate learning about testing in React.
-I practiced different tests in different branches of this repository.
+This repository was created with the intention of making it easier to learn about testing in React. Various tests were implemented in different branches of this repository. The test-driven development approach was applied in the cat-project-TDD and form-TDD branches.
